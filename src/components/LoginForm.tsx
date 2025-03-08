@@ -1,15 +1,45 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Facebook, Mail } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Check for signup success message
+  useEffect(() => {
+    const signupSuccess = localStorage.getItem('signupSuccess');
+    if (signupSuccess) {
+      toast({
+        title: "Account created successfully",
+        description: "You can now log in with your credentials",
+        variant: "default",
+      });
+      localStorage.removeItem('signupSuccess');
+    }
+  }, [toast]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt with:', { email, password });
-    // Add actual login logic here
+    setIsLoading(true);
+    
+    try {
+      await login(email, password);
+      // Login successful, navigation handled in the auth context
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -82,8 +112,9 @@ const LoginForm: React.FC = () => {
           <button
             type="submit"
             className="button-glass w-full py-3 rounded-full font-semibold text-gray-800 mt-4"
+            disabled={isLoading}
           >
-            Log in
+            {isLoading ? 'Logging in...' : 'Log in'}
           </button>
         </form>
       </div>

@@ -3,8 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const SignupPage = () => {
+  const { signup } = useAuth();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,10 +31,29 @@ const SignupPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Signup form submitted:', formData);
-    // Here you would integrate with your Spring Boot backend
+    setIsLoading(true);
+    
+    try {
+      await signup({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        password: formData.password,
+        profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
+      });
+      
+      // Redirect to login is handled in the signup function
+    } catch (error) {
+      toast({
+        title: "Signup failed",
+        description: "There was an error creating your account. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -168,8 +193,9 @@ const SignupPage = () => {
             <button
               type="submit"
               className="button-glass w-full py-3 rounded-full font-semibold text-gray-800 mt-6"
+              disabled={isLoading}
             >
-              Sign up
+              {isLoading ? 'Creating account...' : 'Sign up'}
             </button>
           </form>
           
