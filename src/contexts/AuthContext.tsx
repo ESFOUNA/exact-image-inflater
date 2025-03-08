@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser, googleLogin, facebookLogin, signupUser } from '../services/authService';
 
 interface User {
   id: string;
@@ -15,6 +16,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (tokenId: string) => Promise<void>;
+  loginWithFacebook: (accessToken: string) => Promise<void>;
   signup: (userData: Omit<User, 'id'> & { password: string }) => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
@@ -36,14 +39,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Mock login function (replace with actual API call)
+  // Standard login function using the service
   const login = async (email: string, password: string) => {
     try {
-      // Mock API call to Spring Boot backend
+      // For demo purposes, we'll continue using mock data 
+      // but we're ready to integrate with real API
       console.log('Login attempt:', { email, password });
       
-      // For demo purposes, create a mock user if credentials are valid
+      // Simulating API call for now
       if (email && password.length >= 6) {
+        // In real implementation, we would use:
+        // const response = await loginUser(email, password);
+        // setUser(response.user);
+
         const mockUser: User = {
           id: '1',
           firstName: 'Mohammed',
@@ -66,21 +74,74 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // Mock signup function
-  const signup = async (userData: Omit<User, 'id'> & { password: string }) => {
+  // Google Login
+  const loginWithGoogle = async (tokenId: string) => {
     try {
-      // Mock API call to Spring Boot backend
-      console.log('Signup attempt:', userData);
+      // For demo purposes, we'll continue using mock data
+      console.log('Google login attempt with token:', tokenId);
       
-      // For demo purposes, simulate successful signup
+      // Simulating API call for now
+      // In real implementation, we would use:
+      // const response = await googleLogin(tokenId);
+      // setUser(response.user);
+      
       const mockUser: User = {
-        id: '1',
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        phoneNumber: userData.phoneNumber,
+        id: '2',
+        firstName: 'Google',
+        lastName: 'User',
+        email: 'google.user@example.com',
+        phoneNumber: '',
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
       };
+      
+      setUser(mockUser);
+      setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      navigate('/profile');
+    } catch (error) {
+      console.error('Google login failed:', error);
+      throw error;
+    }
+  };
+
+  // Facebook Login
+  const loginWithFacebook = async (accessToken: string) => {
+    try {
+      // For demo purposes, we'll continue using mock data
+      console.log('Facebook login attempt with token:', accessToken);
+      
+      // Simulating API call for now
+      // In real implementation, we would use:
+      // const response = await facebookLogin(accessToken);
+      // setUser(response.user);
+      
+      const mockUser: User = {
+        id: '3',
+        firstName: 'Facebook',
+        lastName: 'User',
+        email: 'facebook.user@example.com',
+        phoneNumber: '',
+        profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
+      };
+      
+      setUser(mockUser);
+      setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      navigate('/profile');
+    } catch (error) {
+      console.error('Facebook login failed:', error);
+      throw error;
+    }
+  };
+
+  // Signup
+  const signup = async (userData: Omit<User, 'id'> & { password: string }) => {
+    try {
+      // For demo purposes, just log the attempt
+      console.log('Signup attempt:', userData);
+      
+      // In real implementation, we would use:
+      // await signupUser(userData);
       
       // Don't set user directly here, just redirect to login
       localStorage.setItem('signupSuccess', 'true');
@@ -107,7 +168,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, signup, logout, updateUser }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated, 
+      login, 
+      loginWithGoogle, 
+      loginWithFacebook, 
+      signup, 
+      logout, 
+      updateUser 
+    }}>
       {children}
     </AuthContext.Provider>
   );

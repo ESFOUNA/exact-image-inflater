@@ -8,7 +8,7 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithGoogle, loginWithFacebook } = useAuth();
   const { toast } = useToast();
 
   // Check for signup success message
@@ -42,11 +42,41 @@ const LoginForm: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      // In a real implementation, you would get the tokenId from Google SDK
+      // For demo purposes, we're using a mock token
+      await loginWithGoogle("mock-google-token");
+    } catch (error) {
+      toast({
+        title: "Google login failed",
+        description: "Unable to login with Google. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      // In a real implementation, you would get the access token from Facebook SDK
+      // For demo purposes, we're using a mock token
+      await loginWithFacebook("mock-facebook-token");
+    } catch (error) {
+      toast({
+        title: "Facebook login failed",
+        description: "Unable to login with Facebook. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto px-6 py-8 animate-fade-up">
       <div className="flex flex-col gap-4 w-full">
         <button 
           className="social-button flex items-center justify-center gap-2 bg-facebook text-white py-3 px-4 rounded-full w-full font-medium"
+          onClick={handleFacebookLogin}
+          type="button"
         >
           <Facebook size={20} />
           <span>Log in with Facebook</span>
@@ -54,6 +84,8 @@ const LoginForm: React.FC = () => {
         
         <button 
           className="social-button flex items-center justify-center gap-2 bg-google text-gray-700 py-3 px-4 rounded-full w-full font-medium border border-gray-200 shadow-sm"
+          onClick={handleGoogleLogin}
+          type="button"
         >
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path
