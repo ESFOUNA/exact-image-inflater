@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut, Ticket, ShoppingCart, HelpCircle, User, ChevronDown } from 'lucide-react';
+import { LogOut, Ticket, ShoppingCart, HelpCircle, User, ChevronDown, Camera } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -32,8 +32,13 @@ const Header = () => {
       </h1>
       
       <nav className={`flex items-center space-x-8 ${isRTL ? 'space-x-reverse' : ''}`}>
-        <Link to="/signup" className="text-white hover:text-gray-300 transition-colors">{t('signup')}</Link>
-        <Link to="/" className="text-white hover:text-gray-300 transition-colors">{t('login')}</Link>
+        {/* Only show signup/login links when user is not logged in */}
+        {!user && (
+          <>
+            <Link to="/signup" className="text-white hover:text-gray-300 transition-colors">{t('signup')}</Link>
+            <Link to="/" className="text-white hover:text-gray-300 transition-colors">{t('login')}</Link>
+          </>
+        )}
         <Link to="/tickets" className="text-white hover:text-gray-300 transition-colors">{t('ticketList')}</Link>
         <Link to="/cart" className="text-white hover:text-gray-300 transition-colors">{t('cart')}</Link>
         <Link to="/support" className="text-lime-400 hover:text-lime-300 transition-colors">{t('support')}</Link>
@@ -53,7 +58,11 @@ const Header = () => {
             </button>
             
             {isDropdownOpen && (
-              <div className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-48 bg-black/90 backdrop-blur-md border border-gray-700 rounded-md shadow-lg py-1 z-50`}>
+              <div className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black/90 backdrop-blur-md border border-gray-700 rounded-md shadow-lg py-1 z-50`}>
+                <div className="px-4 py-2 border-b border-gray-700">
+                  <p className="text-white font-medium">{user.firstName} {user.lastName}</p>
+                  <p className="text-white/70 text-sm truncate">{user.email}</p>
+                </div>
                 <Link 
                   to="/profile" 
                   className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left"

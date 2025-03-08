@@ -104,3 +104,26 @@ export const signupUser = async (userData: any) => {
     throw error;
   }
 };
+
+// Upload profile image
+export const uploadProfileImage = async (file: File, userId: string) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', userId);
+
+    const response = await fetch(`${API_URL}/users/profile-image`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Image upload failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Image upload error:', error);
+    throw error;
+  }
+};

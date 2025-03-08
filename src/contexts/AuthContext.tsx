@@ -80,6 +80,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // For demo purposes, we'll continue using mock data
       console.log('Google login attempt with token:', tokenId);
       
+      // Extract name from email for mock purposes - in real app, would come from API
+      const emailName = 'user' + Math.floor(Math.random() * 1000);
+      
       // Simulating API call for now
       // In real implementation, we would use:
       // const response = await googleLogin(tokenId);
@@ -87,9 +90,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       const mockUser: User = {
         id: '2',
-        firstName: 'Google',
-        lastName: 'User',
-        email: 'google.user@example.com',
+        firstName: 'John', // Using realistic name instead of "Google User"
+        lastName: 'Doe',   // Using realistic name instead of "User"
+        email: `${emailName}@gmail.com`,
         phoneNumber: '',
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
       };
@@ -110,6 +113,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // For demo purposes, we'll continue using mock data
       console.log('Facebook login attempt with token:', accessToken);
       
+      // Extract name from email for mock purposes - in real app, would come from API
+      const emailName = 'user' + Math.floor(Math.random() * 1000);
+      
       // Simulating API call for now
       // In real implementation, we would use:
       // const response = await facebookLogin(accessToken);
@@ -117,9 +123,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       const mockUser: User = {
         id: '3',
-        firstName: 'Facebook',
-        lastName: 'User',
-        email: 'facebook.user@example.com',
+        firstName: 'Jane', // Using realistic name instead of "Facebook User"
+        lastName: 'Smith', // Using realistic name instead of "User"
+        email: `${emailName}@facebook.com`,
         phoneNumber: '',
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
       };

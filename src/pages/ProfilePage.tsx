@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Eye, Edit, Camera } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -10,6 +10,7 @@ const ProfilePage = () => {
   const { user, updateUser } = useAuth();
   const { language, setLanguage, isRTL, t } = useLanguage();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Edit mode state
   const [isEditing, setIsEditing] = useState(false);
@@ -48,13 +49,30 @@ const ProfilePage = () => {
     setLanguage(language);
   };
 
-  // Handle profile image click (would open file upload in a real app)
+  // Handle profile image click to open file dialog
   const handleProfileImageClick = () => {
-    toast({
-      title: "Upload Profile Picture",
-      description: "This feature would open a file upload dialog in a real application.",
-      variant: "default",
-    });
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Handle file selection for profile image
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // In a real app, you would upload this file to your server
+      // For now, we'll create a temporary URL for display
+      const imageUrl = URL.createObjectURL(file);
+      updateUser({
+        profileImage: imageUrl
+      });
+      
+      toast({
+        title: "Profile Picture Updated",
+        description: "Your profile picture has been successfully updated.",
+        variant: "default",
+      });
+    }
   };
 
   // Handle form submission
@@ -112,6 +130,13 @@ const ProfilePage = () => {
                 <Camera size={32} className="text-white" />
               </div>
             </button>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileChange}
+              className="hidden" 
+              accept="image/*"
+            />
           </div>
           
           <div>
