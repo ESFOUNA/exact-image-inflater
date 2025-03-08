@@ -24,7 +24,7 @@ const Index = () => {
           
           <h1 className="text-3xl font-bold text-white mb-1 animate-fade-in">Log in</h1>
           <p className="text-white/80 mb-6 animate-fade-in">
-            Don't have an account? <a href="#" className="text-white underline hover:text-white/90 transition-colors">Sign up</a>
+            Don't have an account? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">Sign up</Link>
           </p>
           
           <LoginForm />
