@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -106,7 +107,8 @@ export default {
 				'fade-up': 'fade-up 0.5s ease-out'
 			},
 			backgroundImage: {
-				'stadium': "url('/lovable-uploads/dce3de39-5a46-462e-8aed-5e2cd1f5eea3.png')"
+				'stadium': "url('/lovable-uploads/dce3de39-5a46-462e-8aed-5e2cd1f5eea3.png')",
+				'user-profile': "url('/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png')"
 			}
 		}
 	},
