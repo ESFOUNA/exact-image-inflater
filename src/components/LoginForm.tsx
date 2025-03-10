@@ -75,23 +75,23 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto px-6 py-8 animate-fade-up">
-      <div className="flex flex-col gap-4 w-full">
+    <div className="w-full mx-auto px-4 py-5 animate-fade-up">
+      <div className="flex flex-col gap-3 w-full">
         <button 
-          className="social-button flex items-center justify-center gap-2 bg-facebook text-white py-3 px-4 rounded-full w-full font-medium"
+          className="social-button flex items-center justify-center gap-2 bg-facebook text-white py-2 px-4 rounded-full w-full font-medium text-sm"
           onClick={handleFacebookLogin}
           type="button"
         >
-          <Facebook size={20} />
+          <Facebook size={18} />
           <span>Log in with Facebook</span>
         </button>
         
         <button 
-          className="social-button flex items-center justify-center gap-2 bg-google text-gray-700 py-3 px-4 rounded-full w-full font-medium border border-gray-200 shadow-sm"
+          className="social-button flex items-center justify-center gap-2 bg-google text-gray-700 py-2 px-4 rounded-full w-full font-medium border border-gray-200 shadow-sm text-sm"
           onClick={handleGoogleLogin}
           type="button"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24">
+          <svg width="18" height="18" viewBox="0 0 24 24">
             <path
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
               fill="#4285F4"
@@ -114,32 +114,32 @@ const LoginForm: React.FC = () => {
         
         <div className="flex items-center justify-center gap-4 my-2">
           <div className="h-px bg-white/30 flex-1"></div>
-          <span className="text-white font-medium">OR</span>
+          <span className="text-white text-xs font-medium">OR</span>
           <div className="h-px bg-white/30 flex-1"></div>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-white font-medium">Your email</label>
+            <label htmlFor="email" className="text-white text-sm font-medium">Your email</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input-glass w-full px-4 py-3 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+              className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
               placeholder="Email address"
               required
             />
           </div>
           
           <div className="space-y-1">
-            <label htmlFor="password" className="text-white font-medium">Your password</label>
+            <label htmlFor="password" className="text-white text-sm font-medium">Your password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-glass w-full px-4 py-3 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+              className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
               placeholder="Password"
               required
             />
@@ -147,7 +147,7 @@ const LoginForm: React.FC = () => {
           
           <button
             type="submit"
-            className="button-glass w-full py-3 rounded-full font-semibold text-gray-800 mt-4"
+            className="button-glass w-full py-2 rounded-full font-semibold text-gray-800 mt-4 text-sm"
             disabled={isLoading}
           >
             {isLoading ? 'Logging in...' : 'Log in'}

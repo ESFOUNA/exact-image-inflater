@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -44,6 +45,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Neon effect colors */
+    --neon-blue: 210 100% 50%;
+    --neon-purple: 265 80% 60%;
   }
 
   .dark {
@@ -100,6 +105,13 @@
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.input-glass:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.5), 0 0 25px rgba(124, 58, 237, 0.2);
+  outline: none;
 }
 
 .glass-card {
@@ -108,6 +120,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .button-glass {
@@ -166,3 +179,17 @@
 .animate-fade-up {
   animation: fadeUp 0.5s ease-out forwards;
 }
+
+/* Neon focus effect for form inputs */
+.neon-focus {
+  transition: all 0.3s ease;
+}
+
+.neon-focus:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 
+              0 0 10px 2px rgba(124, 58, 237, 0.6),
+              0 0 25px rgba(124, 58, 237, 0.2);
+  border-color: rgba(124, 58, 237, 0.6);
+  outline: none;
+}
+

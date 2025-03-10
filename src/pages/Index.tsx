@@ -17,19 +17,19 @@ const Index = () => {
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"></div>
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="glass-card w-full max-w-md rounded-2xl p-8 flex flex-col items-center">
-          <div className="mb-4">
+        <div className="glass-card w-full max-w-sm rounded-2xl p-6 flex flex-col items-center">
+          <div className="mb-3">
             <Logo />
           </div>
           
-          <h1 className="text-3xl font-bold text-white mb-1 animate-fade-in">Log in</h1>
-          <p className="text-white/80 mb-6 animate-fade-in">
+          <h1 className="text-2xl font-bold text-white mb-1 animate-fade-in">Log in</h1>
+          <p className="text-white/80 mb-5 text-sm animate-fade-in">
             Don't have an account? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">Sign up</Link>
           </p>
           
           <LoginForm />
           
-          <div className="mt-4 text-white/80">
+          <div className="mt-3 text-white/80 text-sm">
             <Link to="/profile" className="text-white underline hover:text-white/90 transition-colors">
               Go to Profile Page
             </Link>
