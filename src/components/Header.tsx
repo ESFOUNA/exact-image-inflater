@@ -26,7 +26,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`relative z-10 flex justify-between items-center px-8 py-4 bg-black`}>
+    <header className={`relative z-30 flex justify-between items-center px-8 py-4 bg-black`}>
       <h1 className="text-white text-3xl font-bold">
         Ticke<span className="text-lime-400">f</span>y
       </h1>
@@ -48,6 +48,8 @@ const Header = () => {
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="relative flex items-center"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="true"
             >
               <img 
                 src={user.profileImage} 
@@ -58,7 +60,10 @@ const Header = () => {
             </button>
             
             {isDropdownOpen && (
-              <div className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black/90 backdrop-blur-md border border-gray-700 rounded-md shadow-lg py-1 z-50`}>
+              <div 
+                className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50`}
+                style={{ transform: 'none', opacity: 1 }}
+              >
                 <div className="px-4 py-2 border-b border-gray-700">
                   <p className="text-white font-medium">{user.firstName} {user.lastName}</p>
                   <p className="text-white/70 text-sm truncate">{user.email}</p>

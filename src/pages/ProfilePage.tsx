@@ -4,6 +4,7 @@ import { Eye, Edit, Camera } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
+import ImageCropper from '@/components/ImageCropper';
 import { useToast } from '@/hooks/use-toast';
 
 const ProfilePage = () => {
@@ -15,6 +16,10 @@ const ProfilePage = () => {
   // Edit mode state
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Image cropper state
+  const [showImageCropper, setShowImageCropper] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
   // Form data
   const [formData, setFormData] = useState({
@@ -60,19 +65,26 @@ const ProfilePage = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // In a real app, you would upload this file to your server
-      // For now, we'll create a temporary URL for display
+      // Create a temporary URL for the cropper
       const imageUrl = URL.createObjectURL(file);
-      updateUser({
-        profileImage: imageUrl
-      });
-      
-      toast({
-        title: "Profile Picture Updated",
-        description: "Your profile picture has been successfully updated.",
-        variant: "default",
-      });
+      setSelectedImage(imageUrl);
+      setShowImageCropper(true);
     }
+  };
+
+  // Handle cropped image save
+  const handleCropSave = (croppedImageUrl: string) => {
+    updateUser({
+      profileImage: croppedImageUrl
+    });
+    
+    toast({
+      title: "Profile Picture Updated",
+      description: "Your profile picture has been successfully updated.",
+      variant: "default",
+    });
+    
+    setShowImageCropper(false);
   };
 
   // Handle form submission
@@ -284,6 +296,15 @@ const ProfilePage = () => {
           <span className="text-white">{user?.email}</span>
         </div>
       </div>
+      
+      {/* Image Cropper Modal */}
+      {showImageCropper && selectedImage && (
+        <ImageCropper 
+          imageUrl={selectedImage}
+          onSave={handleCropSave}
+          onCancel={() => setShowImageCropper(false)}
+        />
+      )}
     </div>
   );
 };
