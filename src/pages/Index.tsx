@@ -17,13 +17,13 @@ const Index = () => {
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"></div>
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="glass-card w-full max-w-sm rounded-2xl p-6 flex flex-col items-center">
-          <div className="mb-3">
+        <div className="glass-card w-full max-w-xs rounded-2xl p-6 flex flex-col items-center">
+          <div className="mb-2">
             <Logo />
           </div>
           
           <h1 className="text-2xl font-bold text-white mb-1 animate-fade-in">Log in</h1>
-          <p className="text-white/80 mb-5 text-sm animate-fade-in">
+          <p className="text-white/80 mb-4 text-sm animate-fade-in">
             Don't have an account? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">Sign up</Link>
           </p>
           

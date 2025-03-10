@@ -3,41 +3,13 @@ import React from 'react';
 
 const Logo: React.FC = () => {
   return (
-    <svg 
-      width="40" 
-      height="60" 
-      viewBox="0 0 40 60" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      className="animate-fade-in"
-    >
-      <path 
-        d="M20 0C15.2173 0 10.6957 1.96912 7.32233 5.46447C3.94893 8.95991 2 13.6174 2 18.5C2 23.3826 3.94893 28.0401 7.32233 31.5355C10.6957 35.0309 15.2173 37 20 37C24.7827 37 29.3043 35.0309 32.6777 31.5355C36.0511 28.0401 38 23.3826 38 18.5C38 13.6174 36.0511 8.95991 32.6777 5.46447C29.3043 1.96912 24.7827 0 20 0Z" 
-        fill="white"
+    <div className="flex flex-col items-center animate-fade-in">
+      <img 
+        src="/lovable-uploads/bf9542ba-1df2-4d84-8555-f6772c864498.png" 
+        alt="CAN 2025 Morocco Logo" 
+        className="w-28 h-auto mb-3" 
       />
-      <path 
-        d="M20 10C17.6133 10 15.3331 10.9482 13.636 12.636C11.9482 14.3331 11 16.6133 11 19C11 21.3867 11.9482 23.6669 13.636 25.364C15.3331 27.0518 17.6133 28 20 28C22.3867 28 24.6669 27.0518 26.364 25.364C28.0518 23.6669 29 21.3867 29 19C29 16.6133 28.0518 14.3331 26.364 12.636C24.6669 10.9482 22.3867 10 20 10Z" 
-        fill="#222"
-      />
-      <path 
-        d="M13 42L20 55L27 42H13Z" 
-        fill="white"
-      />
-      <rect 
-        x="15" 
-        y="37" 
-        width="10" 
-        height="5" 
-        fill="white"
-      />
-      <ellipse 
-        cx="20" 
-        cy="18.5" 
-        rx="3" 
-        ry="3.5" 
-        fill="white"
-      />
-    </svg>
+    </div>
   );
 };
 
