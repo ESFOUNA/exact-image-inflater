@@ -10,6 +10,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import TicketsPage from "./pages/TicketsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AuthCallback from "./components/AuthCallback";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
@@ -26,6 +27,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <ProfilePage />

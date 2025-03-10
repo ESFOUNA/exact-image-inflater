@@ -16,8 +16,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  loginWithGoogle: (tokenId: string) => Promise<void>;
-  loginWithFacebook: (accessToken: string) => Promise<void>;
+  loginWithGoogle: (code: string) => Promise<void>;
+  loginWithFacebook: (code: string) => Promise<void>;
   signup: (userData: Omit<User, 'id'> & { password: string }) => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
@@ -75,23 +75,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Google Login
-  const loginWithGoogle = async (tokenId: string) => {
+  const loginWithGoogle = async (code: string) => {
     try {
       // For demo purposes, we'll continue using mock data
-      console.log('Google login attempt with token:', tokenId);
+      console.log('Google login attempt with code:', code);
       
-      // Extract name from email for mock purposes - in real app, would come from API
-      const emailName = 'user' + Math.floor(Math.random() * 1000);
-      
-      // Simulating API call for now
       // In real implementation, we would use:
-      // const response = await googleLogin(tokenId);
+      // const response = await googleLogin(code);
       // setUser(response.user);
+      
+      // Generate a realistic name based on the time to simulate different users
+      const now = Date.now();
+      const firstName = ['John', 'Jane', 'Alex', 'Emma', 'Michael'][now % 5];
+      const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones'][now % 5];
+      const emailName = firstName.toLowerCase() + Math.floor(now % 1000);
       
       const mockUser: User = {
         id: '2',
-        firstName: 'John', // Using realistic name instead of "Google User"
-        lastName: 'Doe',   // Using realistic name instead of "User"
+        firstName,
+        lastName,
         email: `${emailName}@gmail.com`,
         phoneNumber: '',
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
@@ -108,23 +110,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Facebook Login
-  const loginWithFacebook = async (accessToken: string) => {
+  const loginWithFacebook = async (code: string) => {
     try {
       // For demo purposes, we'll continue using mock data
-      console.log('Facebook login attempt with token:', accessToken);
+      console.log('Facebook login attempt with code:', code);
       
-      // Extract name from email for mock purposes - in real app, would come from API
-      const emailName = 'user' + Math.floor(Math.random() * 1000);
-      
-      // Simulating API call for now
       // In real implementation, we would use:
-      // const response = await facebookLogin(accessToken);
+      // const response = await facebookLogin(code);
       // setUser(response.user);
+      
+      // Generate a realistic name based on the time to simulate different users
+      const now = Date.now();
+      const firstName = ['Sarah', 'David', 'Lisa', 'Robert', 'Jennifer'][now % 5];
+      const lastName = ['Davis', 'Miller', 'Wilson', 'Moore', 'Taylor'][now % 5];
+      const emailName = firstName.toLowerCase() + Math.floor(now % 1000);
       
       const mockUser: User = {
         id: '3',
-        firstName: 'Jane', // Using realistic name instead of "Facebook User"
-        lastName: 'Smith', // Using realistic name instead of "User"
+        firstName,
+        lastName,
         email: `${emailName}@facebook.com`,
         phoneNumber: '',
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',

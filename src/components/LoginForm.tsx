@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Facebook, Mail } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { initiateGoogleLogin, initiateFacebookLogin } from '@/services/authService';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, loginWithGoogle, loginWithFacebook } = useAuth();
+  const { login } = useAuth();
   const { toast } = useToast();
 
   // Check for signup success message
@@ -22,6 +23,29 @@ const LoginForm: React.FC = () => {
       });
       localStorage.removeItem('signupSuccess');
     }
+    
+    // Listen for messages from OAuth popup
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      
+      if (event.data.type === 'AUTH_SUCCESS') {
+        toast({
+          title: "Login successful",
+          description: "You have been logged in with your social account",
+          variant: "default",
+        });
+        // Auth context will handle the redirect
+      } else if (event.data.type === 'AUTH_ERROR') {
+        toast({
+          title: "Login failed",
+          description: event.data.error || "Unable to authenticate with social provider",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
   }, [toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,32 +66,12 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      // In a real implementation, you would get the tokenId from Google SDK
-      // For demo purposes, we're using a mock token
-      await loginWithGoogle("mock-google-token");
-    } catch (error) {
-      toast({
-        title: "Google login failed",
-        description: "Unable to login with Google. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleGoogleLogin = () => {
+    initiateGoogleLogin();
   };
 
-  const handleFacebookLogin = async () => {
-    try {
-      // In a real implementation, you would get the access token from Facebook SDK
-      // For demo purposes, we're using a mock token
-      await loginWithFacebook("mock-facebook-token");
-    } catch (error) {
-      toast({
-        title: "Facebook login failed",
-        description: "Unable to login with Facebook. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleFacebookLogin = () => {
+    initiateFacebookLogin();
   };
 
   return (
