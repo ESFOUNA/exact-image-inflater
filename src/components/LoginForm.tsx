@@ -13,6 +13,11 @@ const countryCodes = [
   { code: '+33', flag: 'fr', name: 'France' },
   { code: '+44', flag: 'gb', name: 'United Kingdom' },
   { code: '+966', flag: 'sa', name: 'Saudi Arabia' },
+  { code: '+971', flag: 'ae', name: 'UAE' },
+  { code: '+49', flag: 'de', name: 'Germany' },
+  { code: '+39', flag: 'it', name: 'Italy' },
+  { code: '+34', flag: 'es', name: 'Spain' },
+  { code: '+91', flag: 'in', name: 'India' },
 ];
 
 const LoginForm: React.FC = () => {
@@ -24,6 +29,7 @@ const LoginForm: React.FC = () => {
   const { t } = useLanguage();
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   // Check for signup success message
   useEffect(() => {
@@ -80,39 +86,13 @@ const LoginForm: React.FC = () => {
   };
 
   const handleGoogleLogin = () => {
-    // For this demo, directly call the mock login function instead of popup flow
-    try {
-      login(email || "demo@example.com", "password123");
-      toast({
-        title: "Demo Login",
-        description: "You've been logged in using demo Google credentials",
-        variant: "default",
-      });
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Demo Google login failed",
-        variant: "destructive",
-      });
-    }
+    // Using the service that opens a popup window for Google OAuth
+    initiateGoogleLogin();
   };
 
   const handleFacebookLogin = () => {
-    // For this demo, directly call the mock login function instead of popup flow
-    try {
-      login(email || "demo@example.com", "password123");
-      toast({
-        title: "Demo Login",
-        description: "You've been logged in using demo Facebook credentials",
-        variant: "default",
-      });
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Demo Facebook login failed",
-        variant: "destructive",
-      });
-    }
+    // Using the service that opens a popup window for Facebook OAuth
+    initiateFacebookLogin();
   };
 
   // Handle country selection
@@ -120,6 +100,21 @@ const LoginForm: React.FC = () => {
     setSelectedCountry(country);
     setShowCountryDropdown(false);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.country-dropdown') && showCountryDropdown) {
+        setShowCountryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCountryDropdown]);
 
   return (
     <div className="w-full mx-auto px-4 py-5 animate-fade-up">
@@ -190,6 +185,52 @@ const LoginForm: React.FC = () => {
               placeholder="Password"
               required
             />
+          </div>
+          
+          <div className="space-y-1">
+            <label htmlFor="phoneNumber" className="text-white text-sm font-medium">Phone number</label>
+            <div className="flex relative">
+              <div 
+                className="country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 rounded-l-md pl-2 pr-1 py-2 flex items-center cursor-pointer"
+                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+              >
+                <img 
+                  src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
+                  className="w-4 h-auto mr-1 cursor-pointer" 
+                  alt={`${selectedCountry.name} flag`} 
+                  onClick={() => setShowCountryDropdown(true)}
+                />
+                <span className="text-white text-sm">{selectedCountry.code}</span>
+                <ChevronDown size={16} className="text-white ml-1" />
+                
+                {showCountryDropdown && (
+                  <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto">
+                    {countryCodes.map((country) => (
+                      <div
+                        key={country.code}
+                        className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
+                        onClick={() => selectCountry(country)}
+                      >
+                        <img 
+                          src={`https://flagcdn.com/w20/${country.flag}.png`} 
+                          className="w-4 h-auto mr-2" 
+                          alt={`${country.name} flag`} 
+                        />
+                        <span className="text-gray-800">{country.name} {country.code}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <input
+                id="phoneNumber"
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 border-l-0 rounded-r-md px-3 py-2 placeholder-white/70 text-sm neon-focus"
+                placeholder="Phone number"
+              />
+            </div>
           </div>
           
           <button

@@ -25,9 +25,9 @@ const Index = () => {
             <Logo />
           </div>
           
-          <h1 className="text-2xl font-bold text-white mb-1 text-center">{t('login')}</h1>
+          <h1 className="text-2xl font-bold text-white mb-1 text-center">Login</h1>
           <p className="text-white/80 mb-4 text-sm text-center">
-            {t('signup')}? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">{t('signup')}</Link>
+            Sign up? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">Sign up</Link>
           </p>
           
           <LoginForm />
