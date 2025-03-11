@@ -67,19 +67,22 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [language, setLanguageState] = useState<Language>('English');
-  const isRTL = language === 'Arabic';
-
-  useEffect(() => {
-    // Set document direction based on language
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-    
-    // Load saved language from localStorage
+  // Load saved language from localStorage
+  const [language, setLanguageState] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem('language') as Language | null;
     if (savedLanguage && ['English', 'French', 'Arabic'].includes(savedLanguage)) {
-      setLanguageState(savedLanguage);
+      return savedLanguage;
     }
-  }, [isRTL]);
+    return 'English';
+  });
+  
+  const isRTL = language === 'Arabic';
+
+  // Set document direction based on language whenever it changes
+  useEffect(() => {
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = language === 'English' ? 'en' : language === 'French' ? 'fr' : 'ar';
+  }, [isRTL, language]);
 
   const setLanguage = (newLanguage: Language) => {
     setLanguageState(newLanguage);

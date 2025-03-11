@@ -26,6 +26,10 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   if (!isAuthenticated || !user) {
     // Clear any potentially stale user data
     localStorage.removeItem('user');
+    
+    // Don't remove language settings when logging out
+    // This preserves language settings across login/logout
+    
     return <Navigate to="/" replace />;
   }
 

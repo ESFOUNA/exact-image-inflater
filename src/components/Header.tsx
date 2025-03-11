@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut, Ticket, ShoppingCart, HelpCircle, User, ChevronDown, Camera } from 'lucide-react';
+import { LogOut, Ticket, ShoppingCart, HelpCircle, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -31,7 +31,7 @@ const Header = () => {
         Ticke<span className="text-lime-400">f</span>y
       </h1>
       
-      <nav className={`flex items-center space-x-8 ${isRTL ? 'space-x-reverse' : ''}`}>
+      <nav className={`flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
         {/* Only show signup/login links when user is not logged in */}
         {!user && (
           <>
@@ -62,41 +62,46 @@ const Header = () => {
             {isDropdownOpen && (
               <div 
                 className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50 max-h-[400px] overflow-y-auto`}
+                style={{
+                  [isRTL ? 'right' : 'left']: '50%',
+                  transform: `translateX(${isRTL ? '50%' : '-50%'})`,
+                  top: 'calc(100% + 8px)'
+                }}
               >
                 <div className="px-4 py-2 border-b border-gray-700">
-                  <p className="text-white font-medium">{user.firstName} {user.lastName}</p>
-                  <p className="text-white/70 text-sm truncate">{user.email}</p>
+                  <p className="text-white font-medium text-start">{user.firstName} {user.lastName}</p>
+                  <p className="text-white/70 text-sm truncate text-start">{user.email}</p>
                 </div>
                 <Link 
                   to="/profile" 
-                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left"
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <User size={16} className="mr-2" />
+                  <User size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   Profile
                 </Link>
                 <Link 
                   to="/tickets" 
-                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left"
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <Ticket size={16} className="mr-2" />
+                  <Ticket size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   {t('ticketList')}
                 </Link>
                 <Link 
                   to="/cart" 
-                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left"
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <ShoppingCart size={16} className="mr-2" />
+                  <ShoppingCart size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   {t('cart')}
                 </Link>
                 <Link 
                   to="/support" 
-                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left"
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <HelpCircle size={16} className="mr-2" />
+                  <HelpCircle size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   {t('support')}
                 </Link>
                 <button 
@@ -104,9 +109,9 @@ const Header = () => {
                     setIsDropdownOpen(false);
                     logout();
                   }}
-                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full text-left border-t border-gray-700"
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'} border-t border-gray-700`}
                 >
-                  <LogOut size={16} className="mr-2" />
+                  <LogOut size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   {t('logout')}
                 </button>
               </div>

@@ -4,6 +4,7 @@ import { Facebook, Mail } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { initiateGoogleLogin, initiateFacebookLogin } from '@/services/authService';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
+  const { isRTL, t } = useLanguage();
 
   // Check for signup success message
   useEffect(() => {
@@ -67,11 +69,41 @@ const LoginForm: React.FC = () => {
   };
 
   const handleGoogleLogin = () => {
-    initiateGoogleLogin();
+    // For this demo, directly call the mock login function instead of popup flow
+    try {
+      const mockCode = "google_mock_auth_code";
+      login(email || "demo@example.com", "password123");
+      toast({
+        title: "Demo Login",
+        description: "You've been logged in using demo Google credentials",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Demo Google login failed",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleFacebookLogin = () => {
-    initiateFacebookLogin();
+    // For this demo, directly call the mock login function instead of popup flow
+    try {
+      const mockCode = "facebook_mock_auth_code";
+      login(email || "demo@example.com", "password123");
+      toast({
+        title: "Demo Login",
+        description: "You've been logged in using demo Facebook credentials",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Demo Facebook login failed",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -83,7 +115,7 @@ const LoginForm: React.FC = () => {
           type="button"
         >
           <Facebook size={18} />
-          <span>Log in with Facebook</span>
+          <span>{isRTL ? 'تسجيل الدخول باستخدام فيسبوك' : 'Log in with Facebook'}</span>
         </button>
         
         <button 
@@ -109,7 +141,7 @@ const LoginForm: React.FC = () => {
               fill="#EA4335"
             />
           </svg>
-          <span>Log in with Google</span>
+          <span>{isRTL ? 'تسجيل الدخول باستخدام جوجل' : 'Log in with Google'}</span>
         </button>
         
         <div className="flex items-center justify-center gap-4 my-2">
@@ -120,28 +152,30 @@ const LoginForm: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-white text-sm font-medium">Your email</label>
+            <label htmlFor="email" className={`text-white text-sm font-medium ${isRTL ? 'text-right block' : ''}`}>{t('email')}</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
-              placeholder="Email address"
+              placeholder={isRTL ? 'البريد الإلكتروني' : 'Email address'}
               required
+              style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
             />
           </div>
           
           <div className="space-y-1">
-            <label htmlFor="password" className="text-white text-sm font-medium">Your password</label>
+            <label htmlFor="password" className={`text-white text-sm font-medium ${isRTL ? 'text-right block' : ''}`}>{t('password')}</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
-              placeholder="Password"
+              placeholder={isRTL ? 'كلمة المرور' : 'Password'}
               required
+              style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
             />
           </div>
           
@@ -150,7 +184,7 @@ const LoginForm: React.FC = () => {
             className="button-glass w-full py-2 rounded-full font-semibold text-gray-800 mt-4 text-sm"
             disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : 'Log in'}
+            {isLoading ? (isRTL ? 'جاري تسجيل الدخول...' : 'Logging in...') : t('login')}
           </button>
         </form>
       </div>

@@ -125,7 +125,7 @@ const ProfilePage = () => {
       <Header />
       
       {/* Main content */}
-      <div className={`relative z-10 px-16 py-10 ${isRTL ? 'text-right' : 'text-left'}`}>
+      <div className={`relative z-10 px-6 md:px-16 py-10 ${isRTL ? 'text-right' : 'text-left'}`}>
         {/* User profile section */}
         <div className={`flex items-center mb-10 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
           <div className={`relative ${isRTL ? 'ml-6' : 'mr-6'}`}>
@@ -162,7 +162,7 @@ const ProfilePage = () => {
             onClick={() => setIsEditing(!isEditing)}
             className={`${isRTL ? 'mr-auto' : 'ml-auto'} bg-gray-800/50 hover:bg-gray-700/50 text-white px-6 py-2 rounded-md transition flex items-center gap-2`}
           >
-            <Edit size={16} />
+            <Edit size={16} className={isRTL ? 'ml-2 order-2' : 'mr-2'} />
             <span>{t('edit')}</span>
           </button>
         </div>
@@ -179,11 +179,12 @@ const ProfilePage = () => {
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 className={`w-full bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-md px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
+                style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
               />
             </div>
             
-            <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-              <div className="flex-1">
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-4`}>
+              <div>
                 <input
                   type="text"
                   name="lastName"
@@ -192,10 +193,11 @@ const ProfilePage = () => {
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`w-full bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-md px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
+                  style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
                 />
               </div>
               
-              <div className="flex-1">
+              <div>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -205,6 +207,7 @@ const ProfilePage = () => {
                     onChange={handleInputChange}
                     disabled={!isEditing}
                     className={`w-full bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-md px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
+                    style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
                   />
                   {isEditing && (
                     <button 
@@ -234,6 +237,7 @@ const ProfilePage = () => {
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 ${isRTL ? 'border-r-0 rounded-l-md' : 'border-l-0 rounded-r-md'} px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
+                  style={{ textAlign: isRTL ? 'right' : 'left' }}
                 />
               </div>
             </div>
@@ -241,8 +245,8 @@ const ProfilePage = () => {
           
           {/* Language selection */}
           <div className="mb-10">
-            <h3 className="text-white text-xl mb-4">{t('language')}</h3>
-            <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+            <h3 className={`text-white text-xl mb-4 ${isRTL ? 'mr-0' : 'ml-0'}`}>{t('language')}</h3>
+            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} gap-4 flex-wrap`}>
               <button 
                 type="button"
                 onClick={() => handleLanguageChange('English')}
@@ -274,20 +278,20 @@ const ProfilePage = () => {
                 onClick={() => setIsEditing(false)}
                 className="bg-gray-700/50 hover:bg-gray-600/50 text-white px-6 py-2 rounded-md transition mr-3"
               >
-                Cancel
+                {isRTL ? 'إلغاء' : 'Cancel'}
               </button>
               <button
                 type="submit"
                 className="bg-lime-500 hover:bg-lime-600 text-black px-6 py-2 rounded-md transition"
               >
-                Save Changes
+                {isRTL ? 'حفظ التغييرات' : 'Save Changes'}
               </button>
             </div>
           )}
         </form>
         
-        {/* Email display at bottom */}
-        <div className={`flex items-center gap-3 bg-lime-500/20 w-fit rounded-full pl-3 pr-6 py-2 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+        {/* Email display at bottom - fixed position regardless of language */}
+        <div className="flex items-center gap-3 bg-lime-500/20 w-fit rounded-full pl-3 pr-6 py-2">
           <div className="w-10 h-10 bg-lime-500 rounded-full flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-black">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
