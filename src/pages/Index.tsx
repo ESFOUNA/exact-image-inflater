@@ -14,7 +14,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-stadium bg-cover bg-center">
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"></div>
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
         <div className="glass-card w-full max-w-xs rounded-2xl p-6 flex flex-col items-center">

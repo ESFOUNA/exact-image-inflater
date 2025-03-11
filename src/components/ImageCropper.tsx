@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+
+import React, { useRef, useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
 
 interface ImageCropperProps {
@@ -13,6 +14,18 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onSave, onCancel 
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    // Center the image initially
+    if (imageRef.current) {
+      const containerRect = imageRef.current.getBoundingClientRect();
+      setPosition({
+        x: containerRect.width / 2 - 100, // 100 is half the crop window size
+        y: containerRect.height / 2 - 100
+      });
+    }
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -50,9 +63,49 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onSave, onCancel 
   };
 
   const handleSave = () => {
-    // In a real app, we would use canvas to crop the image
-    // For this demo, we'll just simulate creating a cropped image
-    onSave(imageUrl);
+    // Create a canvas to crop the image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return;
+    
+    // Set canvas size to the crop area (circular, but we use a square canvas)
+    canvas.width = 200;
+    canvas.height = 200;
+    
+    // Load the image
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      // Create a circular clip path
+      ctx.beginPath();
+      ctx.arc(100, 100, 100, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      
+      // Calculate the portion of the image to draw
+      const cropX = position.x;
+      const cropY = position.y;
+      
+      // Draw the image with the current position and scale
+      ctx.drawImage(
+        img,
+        -cropX / scale,
+        -cropY / scale,
+        canvas.width / scale,
+        canvas.height / scale,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      
+      // Get the cropped image as a data URL
+      const croppedImageUrl = canvas.toDataURL('image/png');
+      onSave(croppedImageUrl);
+    };
+    
+    img.src = imageUrl;
   };
 
   return (
@@ -92,6 +145,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onSave, onCancel 
               transition: isDragging ? 'none' : 'transform 0.1s ease',
             }}
           />
+          <canvas ref={canvasRef} className="hidden" width="200" height="200"></canvas>
         </div>
         
         <div className="mb-6">

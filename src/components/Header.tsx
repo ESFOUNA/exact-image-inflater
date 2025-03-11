@@ -61,8 +61,7 @@ const Header = () => {
             
             {isDropdownOpen && (
               <div 
-                className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50`}
-                style={{ transform: 'none', opacity: 1 }}
+                className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50 max-h-[400px] overflow-y-auto`}
               >
                 <div className="px-4 py-2 border-b border-gray-700">
                   <p className="text-white font-medium">{user.firstName} {user.lastName}</p>

@@ -1,15 +1,31 @@
 
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated) {
+  // Force check localStorage on each route access
+  useEffect(() => {
+    // This will trigger a re-render if storage changes
+    const handleStorageChange = () => {
+      window.location.reload();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  if (!isAuthenticated || !user) {
+    // Clear any potentially stale user data
+    localStorage.removeItem('user');
     return <Navigate to="/" replace />;
   }
 
