@@ -1,24 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Facebook, Mail, ChevronDown } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { initiateGoogleLogin, initiateFacebookLogin } from '@/services/authService';
-import { useLanguage } from '@/contexts/LanguageContext';
-
-// Country codes for phone selection
-const countryCodes = [
-  { code: '+1', flag: 'us', name: 'United States' },
-  { code: '+212', flag: 'ma', name: 'Morocco' },
-  { code: '+33', flag: 'fr', name: 'France' },
-  { code: '+44', flag: 'gb', name: 'United Kingdom' },
-  { code: '+966', flag: 'sa', name: 'Saudi Arabia' },
-  { code: '+971', flag: 'ae', name: 'UAE' },
-  { code: '+49', flag: 'de', name: 'Germany' },
-  { code: '+39', flag: 'it', name: 'Italy' },
-  { code: '+34', flag: 'es', name: 'Spain' },
-  { code: '+91', flag: 'in', name: 'India' },
-];
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -26,10 +11,6 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
-  const { t } = useLanguage();
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
-  const [phoneNumber, setPhoneNumber] = useState('');
 
   // Check for signup success message
   useEffect(() => {
@@ -95,27 +76,6 @@ const LoginForm: React.FC = () => {
     initiateFacebookLogin();
   };
 
-  // Handle country selection
-  const selectCountry = (country: typeof selectedCountry) => {
-    setSelectedCountry(country);
-    setShowCountryDropdown(false);
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.country-dropdown') && showCountryDropdown) {
-        setShowCountryDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCountryDropdown]);
-
   return (
     <div className="w-full mx-auto px-4 py-5 animate-fade-up">
       <div className="flex flex-col gap-3 w-full">
@@ -162,7 +122,7 @@ const LoginForm: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-white text-sm font-medium">{t('email')}</label>
+            <label htmlFor="email" className="text-white text-sm font-medium">Email</label>
             <input
               id="email"
               type="email"
@@ -175,7 +135,7 @@ const LoginForm: React.FC = () => {
           </div>
           
           <div className="space-y-1">
-            <label htmlFor="password" className="text-white text-sm font-medium">{t('password')}</label>
+            <label htmlFor="password" className="text-white text-sm font-medium">Password</label>
             <input
               id="password"
               type="password"
@@ -187,58 +147,12 @@ const LoginForm: React.FC = () => {
             />
           </div>
           
-          <div className="space-y-1">
-            <label htmlFor="phoneNumber" className="text-white text-sm font-medium">Phone number</label>
-            <div className="flex relative">
-              <div 
-                className="country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 rounded-l-md pl-2 pr-1 py-2 flex items-center cursor-pointer"
-                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-              >
-                <img 
-                  src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
-                  className="w-4 h-auto mr-1 cursor-pointer" 
-                  alt={`${selectedCountry.name} flag`} 
-                  onClick={() => setShowCountryDropdown(true)}
-                />
-                <span className="text-white text-sm">{selectedCountry.code}</span>
-                <ChevronDown size={16} className="text-white ml-1" />
-                
-                {showCountryDropdown && (
-                  <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto">
-                    {countryCodes.map((country) => (
-                      <div
-                        key={country.code}
-                        className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
-                        onClick={() => selectCountry(country)}
-                      >
-                        <img 
-                          src={`https://flagcdn.com/w20/${country.flag}.png`} 
-                          className="w-4 h-auto mr-2" 
-                          alt={`${country.name} flag`} 
-                        />
-                        <span className="text-gray-800">{country.name} {country.code}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <input
-                id="phoneNumber"
-                type="tel"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 border-l-0 rounded-r-md px-3 py-2 placeholder-white/70 text-sm neon-focus"
-                placeholder="Phone number"
-              />
-            </div>
-          </div>
-          
           <button
             type="submit"
             className="button-glass w-full py-2 rounded-full font-semibold text-gray-800 mt-4 text-sm"
             disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : t('login')}
+            {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>

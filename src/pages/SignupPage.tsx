@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Eye, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -158,8 +157,8 @@ const SignupPage = () => {
                 >
                   <img 
                     src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
-                    className="w-4 h-auto mr-1" 
-                    alt={`${selectedCountry.name} flag`} 
+                    className="w-4 h-auto mr-1 cursor-pointer" 
+                    alt={`${selectedCountry.name} flag`}
                   />
                   <span className="text-white text-sm">{selectedCountry.code}</span>
                   <ChevronDown size={16} className="text-white ml-1" />

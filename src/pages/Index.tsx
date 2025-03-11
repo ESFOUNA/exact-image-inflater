@@ -3,11 +3,8 @@ import React, { useEffect } from 'react';
 import Logo from '@/components/Logo';
 import LoginForm from '@/components/LoginForm';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
-  const { t } = useLanguage();
-
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
     return () => {

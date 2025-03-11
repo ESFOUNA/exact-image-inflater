@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Eye, Edit, Camera, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,6 +13,11 @@ const countryCodes = [
   { code: '+33', flag: 'fr', name: 'France' },
   { code: '+44', flag: 'gb', name: 'United Kingdom' },
   { code: '+966', flag: 'sa', name: 'Saudi Arabia' },
+  { code: '+971', flag: 'ae', name: 'UAE' },
+  { code: '+49', flag: 'de', name: 'Germany' },
+  { code: '+39', flag: 'it', name: 'Italy' },
+  { code: '+34', flag: 'es', name: 'Spain' },
+  { code: '+91', flag: 'in', name: 'India' },
 ];
 
 const ProfilePage = () => {
@@ -234,9 +238,13 @@ const ProfilePage = () => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
+              <label htmlFor="firstName" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
+                {t('firstName')}
+              </label>
               <input
                 type="text"
                 name="firstName"
+                id="firstName"
                 placeholder={`${t('firstName')}*`}
                 value={formData.firstName}
                 onChange={handleInputChange}
@@ -248,9 +256,13 @@ const ProfilePage = () => {
             
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-4`}>
               <div>
+                <label htmlFor="lastName" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
+                  {t('lastName')}
+                </label>
                 <input
                   type="text"
                   name="lastName"
+                  id="lastName"
                   placeholder={`${t('lastName')}*`}
                   value={formData.lastName}
                   onChange={handleInputChange}
@@ -262,9 +274,13 @@ const ProfilePage = () => {
               
               <div>
                 <div className="relative">
+                  <label htmlFor="password" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
+                    {t('password')}
+                  </label>
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    id="password"
                     placeholder={`${t('password')}*`}
                     value={formData.password}
                     onChange={handleInputChange}
@@ -287,55 +303,13 @@ const ProfilePage = () => {
             </div>
             
             <div>
-              <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div 
-                  className={`country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} px-3 py-3 flex items-center ${isEditing ? 'cursor-pointer' : ''}`}
-                  onClick={() => isEditing && setShowCountryDropdown(!showCountryDropdown)}
-                >
-                  <img 
-                    src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
-                    className={`w-6 h-auto ${isRTL ? 'ml-2' : 'mr-2'}`} 
-                    alt={`${selectedCountry.name} flag`} 
-                  />
-                  <span className="text-white">{selectedCountry.code}</span>
-                  {isEditing && <ChevronDown size={16} className={`text-white ${isRTL ? 'mr-1' : 'ml-1'}`} />}
-                  
-                  {isEditing && showCountryDropdown && (
-                    <div className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto`}>
-                      {countryCodes.map((country) => (
-                        <div
-                          key={country.code}
-                          className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
-                          onClick={() => selectCountry(country)}
-                        >
-                          <img 
-                            src={`https://flagcdn.com/w20/${country.flag}.png`} 
-                            className="w-4 h-auto mr-2" 
-                            alt={`${country.name} flag`} 
-                          />
-                          <span className="text-gray-800">{country.name} {country.code}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  placeholder={`${t('phoneNumber')}*`}
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 ${isRTL ? 'border-r-0 rounded-l-md' : 'border-l-0 rounded-r-md'} px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
-                  style={{ textAlign: isRTL ? 'right' : 'left' }}
-                />
-              </div>
+              {renderPhoneNumberInput()}
             </div>
           </div>
           
           {/* Language selection */}
           <div className="mb-10">
-            <h3 className={`text-white text-xl mb-4 ${isRTL ? 'mr-0' : 'ml-0'}`}>{t('language')}</h3>
+            <h3 className={`text-white text-xl mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>{t('language')}</h3>
             <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} gap-4 flex-wrap`}>
               <button 
                 type="button"
