@@ -1,15 +1,26 @@
 
 import React, { useEffect, useState } from 'react';
-import { Eye } from 'lucide-react';
+import { Eye, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
+// Country codes for phone selection
+const countryCodes = [
+  { code: '+1', flag: 'us', name: 'United States' },
+  { code: '+212', flag: 'ma', name: 'Morocco' },
+  { code: '+33', flag: 'fr', name: 'France' },
+  { code: '+44', flag: 'gb', name: 'United Kingdom' },
+  { code: '+966', flag: 'sa', name: 'Saudi Arabia' },
+];
+
 const SignupPage = () => {
   const { signup } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -40,7 +51,7 @@ const SignupPage = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
+        phoneNumber: `${selectedCountry.code} ${formData.phoneNumber}`,
         password: formData.password,
         profileImage: '/lovable-uploads/ff09267d-4e8d-4415-85fa-d3a6aa50068c.png',
       });
@@ -56,12 +67,33 @@ const SignupPage = () => {
     }
   };
 
+  // Handle country selection
+  const selectCountry = (country: typeof selectedCountry) => {
+    setSelectedCountry(country);
+    setShowCountryDropdown(false);
+  };
+
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.country-dropdown') && showCountryDropdown) {
+        setShowCountryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCountryDropdown]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-stadium bg-cover bg-center">
@@ -73,7 +105,7 @@ const SignupPage = () => {
             <Logo />
           </div>
           
-          <h1 className="text-2xl font-bold text-white mb-3 animate-fade-in">Sign up</h1>
+          <h1 className="text-2xl font-bold text-white mb-3 animate-fade-in text-center">Sign up</h1>
           
           <form onSubmit={handleSubmit} className="w-full space-y-3">
             <div className="grid grid-cols-2 gap-3">
@@ -119,10 +151,37 @@ const SignupPage = () => {
             
             <div className="space-y-1">
               <label htmlFor="phoneNumber" className="text-white text-sm font-medium">Phone number</label>
-              <div className="flex">
-                <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-l-md px-2 py-2 flex items-center">
-                  <img src="https://flagcdn.com/w20/us.png" className="w-4 h-auto mr-1" alt="US flag" />
-                  <span className="text-white text-sm">+1</span>
+              <div className="flex relative">
+                <div 
+                  className="country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 rounded-l-md pl-2 pr-1 py-2 flex items-center cursor-pointer"
+                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  <img 
+                    src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
+                    className="w-4 h-auto mr-1" 
+                    alt={`${selectedCountry.name} flag`} 
+                  />
+                  <span className="text-white text-sm">{selectedCountry.code}</span>
+                  <ChevronDown size={16} className="text-white ml-1" />
+                  
+                  {showCountryDropdown && (
+                    <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto">
+                      {countryCodes.map((country) => (
+                        <div
+                          key={country.code}
+                          className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
+                          onClick={() => selectCountry(country)}
+                        >
+                          <img 
+                            src={`https://flagcdn.com/w20/${country.flag}.png`} 
+                            className="w-4 h-auto mr-2" 
+                            alt={`${country.name} flag`} 
+                          />
+                          <span className="text-gray-800">{country.name} {country.code}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <input
                   id="phoneNumber"
@@ -199,7 +258,7 @@ const SignupPage = () => {
             </button>
           </form>
           
-          <div className="mt-3 text-white/80 text-sm">
+          <div className="mt-3 text-white/80 text-sm text-center">
             Already have an account? <Link to="/" className="text-white underline hover:text-white/90 transition-colors">Log in</Link>
           </div>
         </div>

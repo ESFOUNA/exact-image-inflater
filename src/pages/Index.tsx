@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
-  const { isRTL, t } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
@@ -25,18 +25,12 @@ const Index = () => {
             <Logo />
           </div>
           
-          <h1 className={`text-2xl font-bold text-white mb-1 animate-fade-in ${isRTL ? 'self-end' : 'self-start'}`}>{t('login')}</h1>
-          <p className={`text-white/80 mb-4 text-sm animate-fade-in ${isRTL ? 'self-end' : 'self-start'}`}>
+          <h1 className="text-2xl font-bold text-white mb-1 text-center">{t('login')}</h1>
+          <p className="text-white/80 mb-4 text-sm text-center">
             {t('signup')}? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">{t('signup')}</Link>
           </p>
           
           <LoginForm />
-          
-          <div className={`mt-3 text-white/80 text-sm ${isRTL ? 'self-end' : 'self-start'}`}>
-            <Link to="/profile" className="text-white underline hover:text-white/90 transition-colors">
-              Go to Profile Page
-            </Link>
-          </div>
         </div>
       </div>
     </div>

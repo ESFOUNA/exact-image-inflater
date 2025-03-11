@@ -1,11 +1,20 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Eye, Edit, Camera } from 'lucide-react';
+import { Eye, Edit, Camera, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import ImageCropper from '@/components/ImageCropper';
 import { useToast } from '@/hooks/use-toast';
+
+// Country codes for phone selection
+const countryCodes = [
+  { code: '+1', flag: 'us', name: 'United States' },
+  { code: '+212', flag: 'ma', name: 'Morocco' },
+  { code: '+33', flag: 'fr', name: 'France' },
+  { code: '+44', flag: 'gb', name: 'United Kingdom' },
+  { code: '+966', flag: 'sa', name: 'Saudi Arabia' },
+];
 
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
@@ -16,6 +25,8 @@ const ProfilePage = () => {
   // Edit mode state
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   
   // Image cropper state
   const [showImageCropper, setShowImageCropper] = useState(false);
@@ -33,20 +44,57 @@ const ProfilePage = () => {
   // Initialize form data when user changes
   useEffect(() => {
     if (user) {
+      // Extract country code from phone number if present
+      const phoneInfo = parsePhoneNumber(user.phoneNumber || '');
+      
       setFormData({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         password: '',
-        phoneNumber: user.phoneNumber || '',
+        phoneNumber: phoneInfo.nationalNumber || '',
         email: user.email || '',
       });
+      
+      // Set the country if we found a match
+      if (phoneInfo.countryCode) {
+        const country = countryCodes.find(c => c.code === phoneInfo.countryCode);
+        if (country) {
+          setSelectedCountry(country);
+        }
+      }
     }
   }, [user]);
+
+  // Parse phone number to extract country code and national number
+  const parsePhoneNumber = (phoneNumber: string) => {
+    const result = { countryCode: '', nationalNumber: '' };
+    
+    if (!phoneNumber) return result;
+    
+    // Try to match a country code at the beginning
+    for (const country of countryCodes) {
+      if (phoneNumber.startsWith(country.code)) {
+        result.countryCode = country.code;
+        result.nationalNumber = phoneNumber.substring(country.code.length).trim();
+        return result;
+      }
+    }
+    
+    // If no country code is found, assume it's just a national number
+    result.nationalNumber = phoneNumber;
+    return result;
+  };
 
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Handle country selection
+  const selectCountry = (country: typeof selectedCountry) => {
+    setSelectedCountry(country);
+    setShowCountryDropdown(false);
   };
 
   // Language selection
@@ -93,7 +141,7 @@ const ProfilePage = () => {
     updateUser({
       firstName: formData.firstName,
       lastName: formData.lastName,
-      phoneNumber: formData.phoneNumber,
+      phoneNumber: `${selectedCountry.code} ${formData.phoneNumber}`,
       // Password would be handled differently in a real app
     });
     setIsEditing(false);
@@ -103,6 +151,21 @@ const ProfilePage = () => {
       variant: "default",
     });
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.country-dropdown') && showCountryDropdown) {
+        setShowCountryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCountryDropdown]);
 
   // Add overflow-hidden to body on mount
   useEffect(() => {
@@ -225,9 +288,36 @@ const ProfilePage = () => {
             
             <div>
               <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`bg-white/20 backdrop-blur-md border border-white/30 ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} px-3 py-3 flex items-center`}>
-                  <img src="https://flagcdn.com/w20/us.png" className={`w-6 h-auto ${isRTL ? 'ml-2' : 'mr-2'}`} alt="US flag" />
-                  <span className="text-white">+1</span>
+                <div 
+                  className={`country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} px-3 py-3 flex items-center ${isEditing ? 'cursor-pointer' : ''}`}
+                  onClick={() => isEditing && setShowCountryDropdown(!showCountryDropdown)}
+                >
+                  <img 
+                    src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
+                    className={`w-6 h-auto ${isRTL ? 'ml-2' : 'mr-2'}`} 
+                    alt={`${selectedCountry.name} flag`} 
+                  />
+                  <span className="text-white">{selectedCountry.code}</span>
+                  {isEditing && <ChevronDown size={16} className={`text-white ${isRTL ? 'mr-1' : 'ml-1'}`} />}
+                  
+                  {isEditing && showCountryDropdown && (
+                    <div className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto`}>
+                      {countryCodes.map((country) => (
+                        <div
+                          key={country.code}
+                          className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
+                          onClick={() => selectCountry(country)}
+                        >
+                          <img 
+                            src={`https://flagcdn.com/w20/${country.flag}.png`} 
+                            className="w-4 h-auto mr-2" 
+                            alt={`${country.name} flag`} 
+                          />
+                          <span className="text-gray-800">{country.name} {country.code}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <input
                   type="tel"
