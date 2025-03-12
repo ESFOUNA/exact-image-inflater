@@ -34,8 +34,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        console.log('AuthProvider: Loaded user from localStorage', parsedUser);
+      } catch (error) {
+        console.error('AuthProvider: Error parsing user from localStorage', error);
+        localStorage.removeItem('user');
+      }
     }
   }, []);
 
@@ -43,7 +50,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (email: string, password: string) => {
     try {
       // For demo purposes, we'll continue using mock data 
-      // but we're ready to integrate with real API
       console.log('Login attempt:', { email, password });
       
       // Simulating API call for now
@@ -64,6 +70,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(mockUser);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(mockUser));
+        console.log('AuthProvider: User logged in successfully', mockUser);
         navigate('/profile');
       } else {
         throw new Error('Invalid credentials');
@@ -79,10 +86,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       // For demo purposes, we'll continue using mock data
       console.log('Google login attempt with code:', code);
-      
-      // In real implementation, we would use:
-      // const response = await googleLogin(code);
-      // setUser(response.user);
       
       // Generate a realistic name based on the time to simulate different users
       const now = Date.now();
@@ -102,6 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(mockUser);
       setIsAuthenticated(true);
       localStorage.setItem('user', JSON.stringify(mockUser));
+      console.log('AuthProvider: User logged in with Google successfully', mockUser);
       navigate('/profile');
     } catch (error) {
       console.error('Google login failed:', error);
@@ -114,10 +118,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       // For demo purposes, we'll continue using mock data
       console.log('Facebook login attempt with code:', code);
-      
-      // In real implementation, we would use:
-      // const response = await facebookLogin(code);
-      // setUser(response.user);
       
       // Generate a realistic name based on the time to simulate different users
       const now = Date.now();
@@ -137,6 +137,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(mockUser);
       setIsAuthenticated(true);
       localStorage.setItem('user', JSON.stringify(mockUser));
+      console.log('AuthProvider: User logged in with Facebook successfully', mockUser);
       navigate('/profile');
     } catch (error) {
       console.error('Facebook login failed:', error);

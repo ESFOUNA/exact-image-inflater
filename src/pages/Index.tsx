@@ -2,15 +2,26 @@
 import React, { useEffect } from 'react';
 import Logo from '@/components/Logo';
 import LoginForm from '@/components/LoginForm';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
   }, []);
+  
+  // Redirect to profile if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/profile');
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-stadium bg-cover bg-center">

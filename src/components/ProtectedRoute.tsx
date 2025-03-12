@@ -10,6 +10,12 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, user } = useAuth();
 
+  // Add console logs for debugging
+  useEffect(() => {
+    console.log('ProtectedRoute: isAuthenticated =', isAuthenticated);
+    console.log('ProtectedRoute: user =', user);
+  }, [isAuthenticated, user]);
+
   // Force check localStorage on each route access
   useEffect(() => {
     // This will trigger a re-render if storage changes
@@ -24,6 +30,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }, []);
 
   if (!isAuthenticated || !user) {
+    console.log('ProtectedRoute: Redirecting to home page');
     // Clear any potentially stale user data
     localStorage.removeItem('user');
     
@@ -33,6 +40,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return <Navigate to="/" replace />;
   }
 
+  console.log('ProtectedRoute: Rendering protected content');
   return <>{children}</>;
 };
 
