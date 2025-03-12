@@ -106,6 +106,61 @@ const ProfilePage = () => {
     setLanguage(language);
   };
 
+  // Implement the missing renderPhoneNumberInput function
+  const renderPhoneNumberInput = () => {
+    return (
+      <div>
+        <label htmlFor="phoneNumber" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
+          {t('phoneNumber')}
+        </label>
+        <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div 
+            className={`country-dropdown relative ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} bg-white/20 backdrop-blur-md border border-white/30 px-2 py-3 flex items-center cursor-pointer ${isRTL ? 'border-r' : 'border-l'}`}
+            onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+          >
+            <img 
+              src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
+              className={`w-4 h-auto cursor-pointer ${isRTL ? 'ml-2' : 'mr-2'}`}
+              alt={`${selectedCountry.name} flag`}
+            />
+            <span className="text-white text-sm">{selectedCountry.code}</span>
+            <ChevronDown size={16} className={`text-white ${isRTL ? 'mr-1' : 'ml-1'}`} />
+            
+            {showCountryDropdown && (
+              <div className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto`}>
+                {countryCodes.map((country) => (
+                  <div
+                    key={country.code}
+                    className="flex items-center px-3 py-2 hover:bg-white/30 cursor-pointer"
+                    onClick={() => selectCountry(country)}
+                  >
+                    <img 
+                      src={`https://flagcdn.com/w20/${country.flag}.png`} 
+                      className="w-4 h-auto mr-2" 
+                      alt={`${country.name} flag`} 
+                    />
+                    <span className="text-gray-800">{country.name} {country.code}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <input
+            type="tel"
+            name="phoneNumber"
+            id="phoneNumber"
+            placeholder={`${t('phoneNumber')}*`}
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 ${isRTL ? 'rounded-l-md border-l-0' : 'rounded-r-md border-r-0'} px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
+            style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   // Handle profile image click to open file dialog
   const handleProfileImageClick = () => {
     if (fileInputRef.current) {
