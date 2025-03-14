@@ -16,19 +16,6 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     console.log('ProtectedRoute: user =', user);
   }, [isAuthenticated, user]);
 
-  // Force check localStorage on each route access
-  useEffect(() => {
-    // This will trigger a re-render if storage changes
-    const handleStorageChange = () => {
-      window.location.reload();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
   if (!isAuthenticated || !user) {
     console.log('ProtectedRoute: Redirecting to home page');
     // Clear any potentially stale user data

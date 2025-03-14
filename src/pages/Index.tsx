@@ -9,13 +9,6 @@ const Index = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
-  useEffect(() => {
-    document.body.classList.add('overflow-hidden');
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
-  }, []);
-  
   // Redirect to profile if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
