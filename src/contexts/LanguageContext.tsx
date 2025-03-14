@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'English' | 'French' | 'Arabic';
@@ -27,6 +26,7 @@ const translations = {
     signup: 'Signup',
     login: 'Login',
     logout: 'Logout',
+    profile: 'Profile',
   },
   French: {
     firstName: 'Prénom',
@@ -44,6 +44,7 @@ const translations = {
     signup: 'S\'inscrire',
     login: 'Se connecter',
     logout: 'Se déconnecter',
+    profile: 'Profil',
   },
   Arabic: {
     firstName: 'الاسم الأول',
@@ -61,6 +62,7 @@ const translations = {
     signup: 'التسجيل',
     login: 'تسجيل الدخول',
     logout: 'تسجيل الخروج',
+    profile: 'الملف الشخصي',
   },
 };
 

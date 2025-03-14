@@ -63,8 +63,8 @@ const Header = () => {
               <div 
                 className="absolute mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50 max-h-[400px] overflow-y-auto"
                 style={{
-                  right: isRTL ? '0' : 'auto',
-                  left: isRTL ? 'auto' : '0',
+                  right: isRTL ? 'auto' : '0',
+                  left: isRTL ? '0' : 'auto',
                   top: 'calc(100% + 8px)'
                 }}
               >
@@ -78,7 +78,7 @@ const Header = () => {
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <User size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
-                  Profile
+                  {t('profile')}
                 </Link>
                 <Link 
                   to="/tickets" 

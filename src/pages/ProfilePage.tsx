@@ -42,6 +42,13 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    document.body.classList.remove('overflow-hidden');
+    
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
     if (user) {
       const phoneInfo = parsePhoneNumber(user.phoneNumber || '');
       
@@ -99,9 +106,9 @@ const ProfilePage = () => {
         <label htmlFor="phoneNumber" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
           {t('phoneNumber')}
         </label>
-        <div className="flex">
+        <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
           <div 
-            className={`country-dropdown relative flex items-center cursor-pointer bg-white/20 backdrop-blur-md border border-white/30 px-2 py-3 ${isRTL ? 'rounded-l-none rounded-r-md order-2 border-r' : 'rounded-r-none rounded-l-md order-1 border-l'}`}
+            className={`country-dropdown relative flex items-center cursor-pointer bg-white/20 backdrop-blur-md border border-white/30 px-2 py-3 ${isRTL ? 'rounded-r-none rounded-l-md border-l-0' : 'rounded-l-none rounded-r-md border-r-0'}`}
             onClick={() => setShowCountryDropdown(!showCountryDropdown)}
           >
             <img 
@@ -139,7 +146,7 @@ const ProfilePage = () => {
             value={formData.phoneNumber}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''} ${isRTL ? 'rounded-r-none rounded-l-md order-1 text-right' : 'rounded-l-none rounded-r-md order-2 text-left'}`}
+            className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''} ${isRTL ? 'rounded-l-none rounded-r-md text-right' : 'rounded-r-none rounded-l-md text-left'}`}
             dir={isRTL ? 'rtl' : 'ltr'}
           />
         </div>
@@ -205,13 +212,6 @@ const ProfilePage = () => {
     };
   }, [showCountryDropdown]);
 
-  useEffect(() => {
-    document.body.classList.add('overflow-hidden');
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
-  }, []);
-
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -224,7 +224,7 @@ const ProfilePage = () => {
       
       <div className={`relative z-10 px-6 md:px-16 py-10 ${isRTL ? 'text-right' : 'text-left'}`}>
         <div className={`flex items-center mb-10 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-          <div className={`relative ${isRTL ? 'ml-4' : 'mr-4'}`}>
+          <div className={`relative ${isRTL ? 'ml-6' : 'mr-6'}`}>
             <button 
               onClick={handleProfileImageClick}
               className="group relative w-28 h-28 rounded-full overflow-hidden border-2 border-white"
@@ -256,9 +256,9 @@ const ProfilePage = () => {
           
           <button 
             onClick={() => setIsEditing(!isEditing)}
-            className={`${isRTL ? 'mr-auto' : 'ml-auto'} bg-gray-800/50 hover:bg-gray-700/50 text-white px-6 py-2 rounded-md transition flex items-center gap-2`}
+            className={`${isRTL ? 'mr-auto' : 'ml-auto'} bg-gray-800/50 hover:bg-gray-700/50 text-white px-6 py-2 rounded-md transition flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}
           >
-            <Edit size={16} className={isRTL ? 'ml-2 order-2' : 'mr-2'} />
+            <Edit size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
             <span>{t('edit')}</span>
           </button>
         </div>
