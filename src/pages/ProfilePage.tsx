@@ -6,7 +6,6 @@ import Header from '@/components/Header';
 import ImageCropper from '@/components/ImageCropper';
 import { useToast } from '@/hooks/use-toast';
 
-// Country codes for phone selection
 const countryCodes = [
   { code: '+1', flag: 'us', name: 'United States' },
   { code: '+212', flag: 'ma', name: 'Morocco' },
@@ -26,17 +25,14 @@ const ProfilePage = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Edit mode state
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   
-  // Image cropper state
   const [showImageCropper, setShowImageCropper] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
-  // Form data
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -44,11 +40,9 @@ const ProfilePage = () => {
     phoneNumber: '',
     email: '',
   });
-  
-  // Initialize form data when user changes
+
   useEffect(() => {
     if (user) {
-      // Extract country code from phone number if present
       const phoneInfo = parsePhoneNumber(user.phoneNumber || '');
       
       setFormData({
@@ -59,7 +53,6 @@ const ProfilePage = () => {
         email: user.email || '',
       });
       
-      // Set the country if we found a match
       if (phoneInfo.countryCode) {
         const country = countryCodes.find(c => c.code === phoneInfo.countryCode);
         if (country) {
@@ -69,13 +62,11 @@ const ProfilePage = () => {
     }
   }, [user]);
 
-  // Parse phone number to extract country code and national number
   const parsePhoneNumber = (phoneNumber: string) => {
     const result = { countryCode: '', nationalNumber: '' };
     
     if (!phoneNumber) return result;
     
-    // Try to match a country code at the beginning
     for (const country of countryCodes) {
       if (phoneNumber.startsWith(country.code)) {
         result.countryCode = country.code;
@@ -84,38 +75,33 @@ const ProfilePage = () => {
       }
     }
     
-    // If no country code is found, assume it's just a national number
     result.nationalNumber = phoneNumber;
     return result;
   };
 
-  // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle country selection
   const selectCountry = (country: typeof selectedCountry) => {
     setSelectedCountry(country);
     setShowCountryDropdown(false);
   };
 
-  // Language selection
   const handleLanguageChange = (language: 'English' | 'French' | 'Arabic') => {
     setLanguage(language);
   };
 
-  // Implement the missing renderPhoneNumberInput function
   const renderPhoneNumberInput = () => {
     return (
       <div>
         <label htmlFor="phoneNumber" className={`text-white text-sm font-medium ${isRTL ? 'block text-right' : ''}`}>
           {t('phoneNumber')}
         </label>
-        <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div className="flex">
           <div 
-            className={`country-dropdown relative ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} bg-white/20 backdrop-blur-md border border-white/30 px-2 py-3 flex items-center cursor-pointer ${isRTL ? 'border-r' : 'border-l'}`}
+            className={`country-dropdown relative flex items-center cursor-pointer bg-white/20 backdrop-blur-md border border-white/30 px-2 py-3 ${isRTL ? 'rounded-l-none rounded-r-md order-2 border-r' : 'rounded-r-none rounded-l-md order-1 border-l'}`}
             onClick={() => setShowCountryDropdown(!showCountryDropdown)}
           >
             <img 
@@ -153,33 +139,29 @@ const ProfilePage = () => {
             value={formData.phoneNumber}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 ${isRTL ? 'rounded-l-md border-l-0' : 'rounded-r-md border-r-0'} px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''}`}
-            style={{ textAlign: isRTL ? 'right' : 'left', direction: isRTL ? 'rtl' : 'ltr' }}
+            className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 py-3 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 ${!isEditing ? 'opacity-80' : ''} ${isRTL ? 'rounded-r-none rounded-l-md order-1 text-right' : 'rounded-l-none rounded-r-md order-2 text-left'}`}
+            dir={isRTL ? 'rtl' : 'ltr'}
           />
         </div>
       </div>
     );
   };
 
-  // Handle profile image click to open file dialog
   const handleProfileImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  // Handle file selection for profile image
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Create a temporary URL for the cropper
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       setShowImageCropper(true);
     }
   };
 
-  // Handle cropped image save
   const handleCropSave = (croppedImageUrl: string) => {
     updateUser({
       profileImage: croppedImageUrl
@@ -194,14 +176,12 @@ const ProfilePage = () => {
     setShowImageCropper(false);
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateUser({
       firstName: formData.firstName,
       lastName: formData.lastName,
       phoneNumber: `${selectedCountry.code} ${formData.phoneNumber}`,
-      // Password would be handled differently in a real app
     });
     setIsEditing(false);
     toast({
@@ -211,7 +191,6 @@ const ProfilePage = () => {
     });
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -226,7 +205,6 @@ const ProfilePage = () => {
     };
   }, [showCountryDropdown]);
 
-  // Add overflow-hidden to body on mount
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
     return () => {
@@ -240,17 +218,13 @@ const ProfilePage = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-stadium bg-cover bg-center">
-      {/* Semi-transparent overlay */}
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"></div>
       
-      {/* Header navbar */}
       <Header />
       
-      {/* Main content */}
       <div className={`relative z-10 px-6 md:px-16 py-10 ${isRTL ? 'text-right' : 'text-left'}`}>
-        {/* User profile section */}
         <div className={`flex items-center mb-10 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-          <div className={`relative ${isRTL ? 'ml-6' : 'mr-6'}`}>
+          <div className={`relative ${isRTL ? 'ml-4' : 'mr-4'}`}>
             <button 
               onClick={handleProfileImageClick}
               className="group relative w-28 h-28 rounded-full overflow-hidden border-2 border-white"
@@ -289,7 +263,6 @@ const ProfilePage = () => {
           </button>
         </div>
         
-        {/* Form fields */}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
@@ -362,7 +335,6 @@ const ProfilePage = () => {
             </div>
           </div>
           
-          {/* Language selection */}
           <div className="mb-10">
             <h3 className={`text-white text-xl mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>{t('language')}</h3>
             <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} gap-4 flex-wrap`}>
@@ -409,7 +381,6 @@ const ProfilePage = () => {
           )}
         </form>
         
-        {/* Email display at bottom - fixed position regardless of language */}
         <div className="flex items-center gap-3 bg-lime-500/20 w-fit rounded-full pl-3 pr-6 py-2">
           <div className="w-10 h-10 bg-lime-500 rounded-full flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-black">
@@ -420,7 +391,6 @@ const ProfilePage = () => {
         </div>
       </div>
       
-      {/* Image Cropper Modal */}
       {showImageCropper && selectedImage && (
         <ImageCropper 
           imageUrl={selectedImage}

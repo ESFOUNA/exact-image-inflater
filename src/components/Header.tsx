@@ -31,7 +31,7 @@ const Header = () => {
         Ticke<span className="text-lime-400">f</span>y
       </h1>
       
-      <nav className={`flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
+      <nav className={`flex items-center gap-8`}>
         {/* Only show signup/login links when user is not logged in */}
         {!user && (
           <>
@@ -61,20 +61,20 @@ const Header = () => {
             
             {isDropdownOpen && (
               <div 
-                className={`absolute ${isRTL ? 'right-0' : 'left-0'} mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50 max-h-[400px] overflow-y-auto`}
+                className="absolute mt-2 w-64 bg-black border border-gray-700 rounded-md shadow-lg py-1 z-50 max-h-[400px] overflow-y-auto"
                 style={{
-                  [isRTL ? 'right' : 'left']: '50%',
-                  transform: `translateX(${isRTL ? '50%' : '-50%'})`,
+                  right: isRTL ? '0' : 'auto',
+                  left: isRTL ? 'auto' : '0',
                   top: 'calc(100% + 8px)'
                 }}
               >
                 <div className="px-4 py-2 border-b border-gray-700">
-                  <p className="text-white font-medium text-start">{user.firstName} {user.lastName}</p>
-                  <p className="text-white/70 text-sm truncate text-start">{user.email}</p>
+                  <p className={`text-white font-medium ${isRTL ? 'text-right' : 'text-left'}`}>{user.firstName} {user.lastName}</p>
+                  <p className={`text-white/70 text-sm truncate ${isRTL ? 'text-right' : 'text-left'}`}>{user.email}</p>
                 </div>
                 <Link 
                   to="/profile" 
-                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'flex-row-reverse text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <User size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
@@ -82,7 +82,7 @@ const Header = () => {
                 </Link>
                 <Link 
                   to="/tickets" 
-                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'flex-row-reverse text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <Ticket size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
@@ -90,7 +90,7 @@ const Header = () => {
                 </Link>
                 <Link 
                   to="/cart" 
-                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'flex-row-reverse text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <ShoppingCart size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
@@ -98,7 +98,7 @@ const Header = () => {
                 </Link>
                 <Link 
                   to="/support" 
-                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'}`}
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'flex-row-reverse text-right' : 'text-left'}`}
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <HelpCircle size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
@@ -109,7 +109,7 @@ const Header = () => {
                     setIsDropdownOpen(false);
                     logout();
                   }}
-                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'text-right' : 'text-left'} border-t border-gray-700`}
+                  className={`flex items-center px-4 py-2 text-white hover:bg-gray-800 w-full ${isRTL ? 'flex-row-reverse text-right' : 'text-left'} border-t border-gray-700`}
                 >
                   <LogOut size={16} className={isRTL ? 'ml-2' : 'mr-2'} />
                   {t('logout')}
