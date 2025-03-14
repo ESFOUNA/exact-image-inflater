@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from 'react';
 import { Eye, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '@/components/Logo';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Country codes for phone selection
 const countryCodes = [
@@ -17,6 +19,7 @@ const countryCodes = [
 const SignupPage = () => {
   const { signup } = useAuth();
   const { toast } = useToast();
+  const { t, isRTL } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
@@ -72,13 +75,6 @@ const SignupPage = () => {
     setShowCountryDropdown(false);
   };
 
-  useEffect(() => {
-    document.body.classList.add('overflow-hidden');
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
-  }, []);
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,12 +100,12 @@ const SignupPage = () => {
             <Logo />
           </div>
           
-          <h1 className="text-2xl font-bold text-white mb-3 animate-fade-in text-center">Sign up</h1>
+          <h1 className="text-2xl font-bold text-white mb-3 animate-fade-in text-center">{t('signup')}</h1>
           
           <form onSubmit={handleSubmit} className="w-full space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label htmlFor="firstName" className="text-white text-sm font-medium">First name</label>
+                <label htmlFor="firstName" className="text-white text-sm font-medium">{t('firstName')}</label>
                 <input
                   id="firstName"
                   name="firstName"
@@ -122,7 +118,7 @@ const SignupPage = () => {
               </div>
               
               <div className="space-y-1">
-                <label htmlFor="lastName" className="text-white text-sm font-medium">Last name</label>
+                <label htmlFor="lastName" className="text-white text-sm font-medium">{t('lastName')}</label>
                 <input
                   id="lastName"
                   name="lastName"
@@ -136,7 +132,7 @@ const SignupPage = () => {
             </div>
             
             <div className="space-y-1">
-              <label htmlFor="email" className="text-white text-sm font-medium">Email address</label>
+              <label htmlFor="email" className="text-white text-sm font-medium">{t('email')}</label>
               <input
                 id="email"
                 name="email"
@@ -149,22 +145,22 @@ const SignupPage = () => {
             </div>
             
             <div className="space-y-1">
-              <label htmlFor="phoneNumber" className="text-white text-sm font-medium">Phone number</label>
-              <div className="flex relative">
+              <label htmlFor="phoneNumber" className="text-white text-sm font-medium">{t('phoneNumber')}</label>
+              <div className={`flex relative ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
                 <div 
-                  className="country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 rounded-l-md pl-2 pr-1 py-2 flex items-center cursor-pointer"
+                  className={`country-dropdown relative bg-white/20 backdrop-blur-md border border-white/30 ${isRTL ? 'rounded-r-md' : 'rounded-l-md'} px-2 py-2 flex items-center cursor-pointer ${isRTL ? 'border-r-1' : 'border-l-1'}`}
                   onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                 >
                   <img 
                     src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} 
-                    className="w-4 h-auto mr-1 cursor-pointer" 
+                    className={`w-4 h-auto ${isRTL ? 'ml-1' : 'mr-1'} cursor-pointer`}
                     alt={`${selectedCountry.name} flag`}
                   />
                   <span className="text-white text-sm">{selectedCountry.code}</span>
-                  <ChevronDown size={16} className="text-white ml-1" />
+                  <ChevronDown size={16} className={`text-white ${isRTL ? 'mr-1' : 'ml-1'}`} />
                   
                   {showCountryDropdown && (
-                    <div className="absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto">
+                    <div className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} mt-1 w-48 rounded-md shadow-lg bg-white/90 backdrop-blur-md z-50 border border-white/30 max-h-48 overflow-y-auto`}>
                       {countryCodes.map((country) => (
                         <div
                           key={country.code}
@@ -173,7 +169,7 @@ const SignupPage = () => {
                         >
                           <img 
                             src={`https://flagcdn.com/w20/${country.flag}.png`} 
-                            className="w-4 h-auto mr-2" 
+                            className={`w-4 h-auto ${isRTL ? 'ml-2' : 'mr-2'}`}
                             alt={`${country.name} flag`} 
                           />
                           <span className="text-gray-800">{country.name} {country.code}</span>
@@ -188,14 +184,14 @@ const SignupPage = () => {
                   type="tel"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
-                  className="flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 border-l-0 rounded-r-md px-3 py-2 placeholder-white/70 text-sm neon-focus"
+                  className={`flex-1 bg-white/20 backdrop-blur-md text-white border border-white/30 ${isRTL ? 'border-r-0 rounded-l-md' : 'border-l-0 rounded-r-md'} px-3 py-2 placeholder-white/70 text-sm neon-focus`}
                   required
                 />
               </div>
             </div>
             
             <div className="space-y-1">
-              <label htmlFor="password" className="text-white text-sm font-medium">Password</label>
+              <label htmlFor="password" className="text-white text-sm font-medium">{t('password')}</label>
               <div className="relative">
                 <input
                   id="password"
@@ -209,10 +205,10 @@ const SignupPage = () => {
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white/80 hover:text-white flex items-center gap-1"
+                  className={`absolute ${isRTL ? 'left-2' : 'right-2'} top-1/2 -translate-y-1/2 text-white/80 hover:text-white flex items-center gap-1`}
                 >
                   <Eye size={16} />
-                  <span className="text-xs">{showPassword ? "Hide" : "Show"}</span>
+                  <span className="text-xs">{showPassword ? t('hide') : t('show')}</span>
                 </button>
               </div>
             </div>
@@ -225,7 +221,7 @@ const SignupPage = () => {
                   type="checkbox"
                   checked={formData.marketingConsent}
                   onChange={handleInputChange}
-                  className="mt-1 mr-2 neon-focus"
+                  className={`mt-1 ${isRTL ? 'ml-2' : 'mr-2'} neon-focus`}
                 />
                 <label htmlFor="marketingConsent" className="text-white text-xs">
                   By creating an account, I am also consenting to receive SMS messages and emails, including product new feature updates, events, and marketing promotions.
@@ -239,7 +235,7 @@ const SignupPage = () => {
                   type="checkbox"
                   checked={formData.termsAgreed}
                   onChange={handleInputChange}
-                  className="mt-1 mr-2 neon-focus"
+                  className={`mt-1 ${isRTL ? 'ml-2' : 'mr-2'} neon-focus`}
                   required
                 />
                 <label htmlFor="termsAgreed" className="text-white text-xs">
@@ -253,12 +249,12 @@ const SignupPage = () => {
               className="button-glass w-full py-2 rounded-full font-semibold text-gray-800 mt-4 text-sm"
               disabled={isLoading}
             >
-              {isLoading ? 'Creating account...' : 'Sign up'}
+              {isLoading ? 'Creating account...' : t('signup')}
             </button>
           </form>
           
           <div className="mt-3 text-white/80 text-sm text-center">
-            Already have an account? <Link to="/" className="text-white underline hover:text-white/90 transition-colors">Log in</Link>
+            Already have an account? <Link to="/" className="text-white underline hover:text-white/90 transition-colors">{t('login')}</Link>
           </div>
         </div>
       </div>

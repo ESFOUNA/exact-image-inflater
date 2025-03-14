@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Facebook } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { initiateGoogleLogin, initiateFacebookLogin } from '@/services/authService';
 
 const LoginForm: React.FC = () => {
@@ -11,6 +12,7 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
+  const { t, isRTL } = useLanguage();
 
   // Check for signup success message
   useEffect(() => {
@@ -85,7 +87,7 @@ const LoginForm: React.FC = () => {
           type="button"
         >
           <Facebook size={18} />
-          <span>Log in with Facebook</span>
+          <span>{t('login')} with Facebook</span>
         </button>
         
         <button 
@@ -111,7 +113,7 @@ const LoginForm: React.FC = () => {
               fill="#EA4335"
             />
           </svg>
-          <span>Log in with Google</span>
+          <span>{t('login')} with Google</span>
         </button>
         
         <div className="flex items-center justify-center gap-4 my-2">
@@ -122,27 +124,27 @@ const LoginForm: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-1">
-            <label htmlFor="email" className="text-white text-sm font-medium">Email</label>
+            <label htmlFor="email" className="text-white text-sm font-medium">{t('email')}</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
-              placeholder="Email address"
+              placeholder={t('email')}
               required
             />
           </div>
           
           <div className="space-y-1">
-            <label htmlFor="password" className="text-white text-sm font-medium">Password</label>
+            <label htmlFor="password" className="text-white text-sm font-medium">{t('password')}</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-glass neon-focus w-full px-3 py-2 rounded-md text-white placeholder-white/70 text-sm"
-              placeholder="Password"
+              placeholder={t('password')}
               required
             />
           </div>
@@ -152,7 +154,7 @@ const LoginForm: React.FC = () => {
             className="button-glass w-full py-2 rounded-full font-semibold text-gray-800 mt-4 text-sm"
             disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? 'Logging in...' : t('login')}
           </button>
         </form>
       </div>

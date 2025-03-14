@@ -4,9 +4,11 @@ import Logo from '@/components/Logo';
 import LoginForm from '@/components/LoginForm';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   
   // Redirect to profile if already authenticated
@@ -26,9 +28,9 @@ const Index = () => {
             <Logo />
           </div>
           
-          <h1 className="text-2xl font-bold text-white mb-1 text-center">Login</h1>
+          <h1 className="text-2xl font-bold text-white mb-1 text-center">{t('login')}</h1>
           <p className="text-white/80 mb-4 text-sm text-center">
-            Sign up? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">Sign up</Link>
+            {t('signup')}? <Link to="/signup" className="text-white underline hover:text-white/90 transition-colors">{t('signup')}</Link>
           </p>
           
           <LoginForm />
